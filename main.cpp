@@ -77,7 +77,13 @@ public:
         _crtLed = crtLed;//Cate Leduri are matricea in total(patrate please)
         _ledarray = NULL;//trebuie facut cum trebuie
     }
-    void changeMap(Led ledarray[]){
+    // functie ii dam un array de inturi, iar fiecare valoare reprezinta ceva
+    // 0 - spatiu gol
+    // 1 - perete
+    // 2 - player
+    // 3 - enemy(left-write)
+    // 4 - enemy(up-down)
+    void changeMap(int ledarray[]){
         _ledarray = ledarray;
     }
 
@@ -86,6 +92,14 @@ public:
         Adafruit_NeoPixel ledMatrix = Adafruit_NeoPixel(_crtLed,_pin, NEO_GRB + NEO_KHZ800);
     }
 };
+
+class Game{
+    LedMatrix _map;
+    Player _player;
+
+}
+
+
 
 
 void setup(){
