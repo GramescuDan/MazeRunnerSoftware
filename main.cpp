@@ -33,6 +33,9 @@ public:
     void moveRight(){
 
     }
+    void setup(){
+
+    }
 
 };
 class Wall :Led{
@@ -75,7 +78,7 @@ public:
     LedMatrix(int pin, int crtLed){
         _pin = pin;
         _crtLed = crtLed;//Cate Leduri are matricea in total(patrate please)
-        _ledarray = NULL;//trebuie facut cum trebuie
+        _ledarray = new Led[];//trebuie facut cum trebuie
     }
     // functie ii dam un array de inturi, iar fiecare valoare reprezinta ceva
     // 0 - spatiu gol
