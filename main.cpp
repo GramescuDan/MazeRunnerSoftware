@@ -22,22 +22,18 @@ public:
         _position = position;
     }
 
-    // sus = (1,0)
-    // jos = (,)
-    // stanga = (,)
-    // dreapta = (,)
-
     void moveDown(){
-
+        _position +=8;
     }
     void moveLeft(){
-
+        _position -=1;
     }
     void moveUp(){
 
+        _position -=8;
     }
     void moveRight(){
-
+        _position +=1;
     }
 };
 
