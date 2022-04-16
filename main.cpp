@@ -17,10 +17,60 @@ public:
     }
 };
 
-class MovableObject :Led{
+class Player : public Led{
+Joystic *joystick;
+int _joystick_pin_x = 14;
+int _joystick_pin_y = 15;
+int _joystick_pin_sw = 2;
+int _lowrange = 0;
+int _high_range = 1023;
+int _range_division = 100;
+
+public: int _position;
+
+public:
+    Player(int position): Led(0x000089)
+    {
+
+    }
+
+    void setup(){
+        joystick = new AxisJoystick(_joystick_pin_sw,_joystick_pin_x,_joystick_pin_y);
+        joystick->calibrate(_lowrange,_high_range,_range_division);
+    }
+
+    void moveDown(){
+        _position +=8;
+    }
+    void moveLeft(){
+        _position -=1;
+    }
+    void moveUp(){
+
+        _position -=8;
+    }
+    void moveRight(){
+        _position +=1;
+    }
+
+    void loop(){
+
+        if(joystick->isDown()){
+            moveDown();
+        }else if(joystick->isUp()){
+            moveUp();
+        }else if(joystick->isLeft()){
+            moveLeft();
+        }else if(joystick->isRight()){
+            moveRight();
+        }
+    }
+};
+
+class Enemy :Led{
 public: int _position;
 public:
-    MovableObject(int position, int color):Led(color){
+    Enemy(int position):Led(0X890000){
         _position = position;
     }
 
@@ -37,46 +87,7 @@ public:
     void moveRight(){
         _position +=1;
     }
-};
 
-class Player : MovableObject{
-Joystic *joystick;
-int _joystick_pin_x = 14;
-int _joystick_pin_y = 15;
-int _joystick_pin_sw = 2;
-int _lowrange = 0;
-int _high_range = 1023;
-int _range_division = 100;
-
-//MovableObject _movableObject;
-
-public:
-    Player(int position):MovableObject(position,0X890000) {
-
-    }
-
-    void setup(){
-        joystick = new AxisJoystick(_joystick_pin_sw,_joystick_pin_x,_joystick_pin_y);
-        joystick->calibrate(_lowrange,_high_range,_range_division);
-    }
-    void loop(){
-
-        if(joystick->isDown()){
-            moveDown();
-        }else if(joystick->isUp()){
-            _movableObject.moveUp();
-        }else if(joystick->isLeft()){
-            _movableObject.moveLeft();
-        }else if(joystick->isRight()){
-            _movableObject.moveRight();
-        }
-    }
-};
-
-class Enemy :MovableObject{
-public:
-    Enemy(int position):MovableObject(position,0X890000){
-    }
     //Trebuie implementat cum se misca
     void aiMovement(){
 
@@ -87,12 +98,14 @@ class LedMatrix{
     int _pin;
     int _crtLed;
     std::vector<Led> _ledarray;
+    //Led _ledarray;
 public:
 
     LedMatrix(int pin, int crtLed){
         _pin = pin;
         _crtLed = crtLed;//Cate Leduri are matricea in total(patrate please)
         //_ledarray[1] = *new Led(0X890000);
+        _ledarray =
 
     }
 
@@ -109,11 +122,13 @@ public:
                 //Se adauga gol in matrice
                 break;
             case 1:
-                _ledarray[i] = *new Wall();
+                //_ledarray[i] = *new Wall();
+                _ledarray.push_back(*new Wall);
                 break;
             case 2:
-                _ledarray[i] = *new Player(*new MovableObject(i,0x000089));
+                //_ledarray[i] = *new Player(i);
                 //Se adauga player in matrice
+                _ledarray.push_back(*new Player(i));
                  break;
             case 3:
                 //Se adauga inamic in matrice
@@ -127,6 +142,8 @@ public:
     void setup(){
         Adafruit_NeoPixel ledMatrix = Adafruit_NeoPixel(_crtLed,_pin, NEO_GRB + NEO_KHZ800);
         ledMatrix.begin();
+
+
     }
 };
 
