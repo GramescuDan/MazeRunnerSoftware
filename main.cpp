@@ -59,7 +59,7 @@ public:
         joystick = new AxisJoystick(_joystick_pin_sw,_joystick_pin_x,_joystick_pin_y);
         joystick->calibrate(_lowrange,_high_range,_range_division);
     }
-    void loop{
+    void loop(){
 
         if(joystick->isDown()){
             this.moveDown();
@@ -71,7 +71,7 @@ public:
             this.moveRight();
         }
     }
-}
+};
 
 class Enemy :MovableObject{
 public:
@@ -131,7 +131,7 @@ class Game{
     LedMatrix _map;
     Player _player;
 
-}
+};
 
 
 
