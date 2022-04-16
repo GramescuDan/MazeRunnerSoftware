@@ -16,7 +16,7 @@ class Wall :Led{
 };
 
 class MovableObject :Led{
-    int _position;
+public: int _position;
 public:
     MovableObject(int position, int color):Led(color){
         _position = position;
@@ -41,7 +41,7 @@ public:
     }
 };
 
-class Player :MovableObject{
+class Player :public MovableObject{
 Joystic *joystick;
 int _joystick_pin_x = 14;
 int _joystick_pin_y = 15;
@@ -50,8 +50,10 @@ int _lowrange = 0;
 int _high_range = 1023;
 int _range_division = 100;
 
+MovableObject _movableObject;
+
 public:
-    Player(int position):MovableObject(position,0x000089){
+    Player( MovableObject x) : MovableObject(x._position, 0x000089), _movableObject(x) {
 
     }
 
@@ -62,13 +64,13 @@ public:
     void loop(){
 
         if(joystick->isDown()){
-            this.moveDown();
+            _movableObject.moveDown();
         }else if(joystick->isUp()){
-            this.moveUp();
+            _movableObject.moveUp();
         }else if(joystick->isLeft()){
-            this.moveLeft();
+            _movableObject.moveLeft();
         }else if(joystick->isRight()){
-            this.moveRight();
+            _movableObject.moveRight();
         }
     }
 };
@@ -128,18 +130,20 @@ public:
 };
 
 class Game{
+    Game() {}
+
     LedMatrix _map;
     Player _player;
 
 };
 
-
+// newPlayer(*new MovableObject(1,0x000089));
 
 
 void setup(){
-
+    //newPlayer.setup();
 }
 
 void loop(){
-
+    //newPlayer.loop();
 }
