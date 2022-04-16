@@ -15,10 +15,15 @@ public:
     }
 };
 
-class Player :Led{
+class Wall :Led{
+    Wall( int color):Led(0xC5C5C5){
+    }
+};
+
+class MovableObject :Led{
     int _position;
 public:
-    Player(int position, int color):Led(color){
+    MovableObject(int position, int color):Led(color){
         _position = position;
     }
     void moveDown(){
@@ -33,38 +38,28 @@ public:
     void moveRight(){
 
     }
+};
+
+class Player :MovableObject{
+
+    
+public:
+    Player(int position):Led(0x000089){
+        _position = position;
+    }
+
     void setup(){
 
     }
+}
 
-};
-class Wall :Led{
-    Wall( int color):Led(color){
-    }
-};
-
-class Enemy :Led{
-    int _position;
+class Enemy :MovableObject{
 public:
-    Enemy(int position, int color):Led(color){
+    Enemy(int position):Led(0X890000){
         _position = position;
     }
     //Trebuie implementat cum se misca
-    void doAction(int type_action){
-       switch(type_action){
-           case 0:
-               leftWrite();
-               break;
-
-               case 1:
-                   upDown();
-                   break;
-       }
-    }
-    void leftWrite(){
-
-    }
-    void upDown(){
+    void aiMovement(){
 
     }
 };
