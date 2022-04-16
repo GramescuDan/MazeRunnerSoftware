@@ -1,6 +1,7 @@
 #include <iostream>
 #include <avr/interrupt.h>
 #include <Adafruit_NeoPixel.h>
+#include <vector>
 
 class Led{
 long _color;
@@ -10,8 +11,9 @@ public:
     }
 };
 
-class Wall :Led{
-    Wall( int color):Led(0xC5C5C5){
+class Wall :public Led{
+public:
+    Wall():Led(0xC5C5C5){
     }
 };
 
@@ -37,7 +39,7 @@ public:
     }
 };
 
-class Player :public MovableObject{
+class Player : MovableObject{
 Joystic *joystick;
 int _joystick_pin_x = 14;
 int _joystick_pin_y = 15;
@@ -46,10 +48,10 @@ int _lowrange = 0;
 int _high_range = 1023;
 int _range_division = 100;
 
-MovableObject _movableObject;
+//MovableObject _movableObject;
 
 public:
-    Player( MovableObject x) : MovableObject(x._position, 0x000089), _movableObject(x) {
+    Player(int position):MovableObject(position,0X890000) {
 
     }
 
@@ -60,7 +62,7 @@ public:
     void loop(){
 
         if(joystick->isDown()){
-            _movableObject.moveDown();
+            moveDown();
         }else if(joystick->isUp()){
             _movableObject.moveUp();
         }else if(joystick->isLeft()){
@@ -84,13 +86,14 @@ public:
 class LedMatrix{
     int _pin;
     int _crtLed;
-    Led _ledarray[];
+    std::vector<Led> _ledarray;
 public:
 
     LedMatrix(int pin, int crtLed){
         _pin = pin;
         _crtLed = crtLed;//Cate Leduri are matricea in total(patrate please)
-        _ledarray = new Led[];//trebuie facut cum trebuie
+        //_ledarray[1] = *new Led(0X890000);
+
     }
 
     // functie ii dam un array de inturi, iar fiecare valoare reprezinta ceva
@@ -106,9 +109,10 @@ public:
                 //Se adauga gol in matrice
                 break;
             case 1:
-                //Se adauga perete in matrice
+                _ledarray[i] = *new Wall();
                 break;
             case 2:
+                _ledarray[i] = *new Player(*new MovableObject(i,0x000089));
                 //Se adauga player in matrice
                  break;
             case 3:
@@ -122,6 +126,7 @@ public:
 
     void setup(){
         Adafruit_NeoPixel ledMatrix = Adafruit_NeoPixel(_crtLed,_pin, NEO_GRB + NEO_KHZ800);
+        ledMatrix.begin();
     }
 };
 
